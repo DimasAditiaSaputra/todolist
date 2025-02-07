@@ -11,7 +11,7 @@ This is a simple frontend for a Todo List application built with HTML, CSS, and 
 ## Setup
 1. Clone this repository:
    ```sh
-   git clone https://github.com/your-username/todo-frontend.git
+   git clone https://github.com/DimasAditiaSaputra/todolist.git
    cd todo-frontend
    ```
 2. Open `index.html` in a browser.
