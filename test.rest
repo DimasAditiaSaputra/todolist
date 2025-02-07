@@ -1,0 +1,24 @@
+GET http://localhost:8080/todo
+
+
+// create todo
+###
+POST http://localhost:8080/todo
+Content-Type: application/json
+
+{
+    "todo": "nyapu"
+}
+
+// update todo
+###
+PATCH  http://localhost:8080/todo/0e99934d-ca87-48dd-be1b-67a8981dcbd2
+Content-Type: application/json
+
+{
+    "todo": "beli sayur"
+}
+
+// delete todo
+###
+DELETE  http://localhost:8080/todo/0e99934d-ca87-48dd-be1b-67a8981dcbd2

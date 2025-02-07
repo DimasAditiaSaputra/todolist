@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: auto; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 10px; border: 1px solid #ddd; margin: 5px 0; display: flex; justify-content: space-between; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <input type="text" id="todoInput" placeholder="Enter a todo">
+    <button onclick="addTodo()">Add Todo</button>
+    <ul id="todoList"></ul>
+
+    <script>
+        const apiUrl = 'http://localhost:8080/todo';
+
+        async function fetchTodos() {
+            const response = await fetch(apiUrl);
+            const todos = await response.json();
+            const list = document.getElementById('todoList');
+            list.innerHTML = '';
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.innerHTML = `${todo.todo} 
+                    <button onclick="updateTodo('${todo.uuid}')">Edit</button>
+                    <button onclick="deleteTodo('${todo.uuid}')">Delete</button>`;
+                list.appendChild(li);
+            });
+        }
+
+        async function addTodo() {
+            const todoText = document.getElementById('todoInput').value;
+            if (!todoText) return;
+            await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ todo: todoText })
+            });
+            document.getElementById('todoInput').value = '';
+            fetchTodos();
+        }
+
+        async function updateTodo(uuid) {
+            const newTodo = prompt('Update todo:');
+            if (!newTodo) return;
+            await fetch(`${apiUrl}/${uuid}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ todo: newTodo })
+            });
+            fetchTodos();
+        }
+
+        async function deleteTodo(uuid) {
+            await fetch(`${apiUrl}/${uuid}`, { method: 'DELETE' });
+            fetchTodos();
+        }
+
+        fetchTodos();
+    </script>
+</body>
+</html>
